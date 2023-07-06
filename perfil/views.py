@@ -6,14 +6,17 @@ from django.contrib.messages import constants
 
 
 def home(request):
-    return render(request, 'home.html')
+    contas = Conta.objects.all()
+    return render(request, 'home.html', {'contas' : contas})
 
 def gerenciar(request):
     contas = Conta.objects.all()
+    categorias = Categoria.objects.all()
+ 
     total_conta = 0
     for conta in contas:
         total_conta += conta.valor
-    return render(request, 'gerenciar.html', {'contas' : contas, 'total_conta' : total_conta})
+    return render(request, 'gerenciar.html', {'contas' : contas, 'total_conta' : total_conta, 'categorias' : categorias})
 
 def cadastrar_banco(request):
     apelido = request.POST.get('apelido')
@@ -48,8 +51,14 @@ def deletar_banco(request, id):
 
 def cadastrar_categoria(request):
     
-    nome = request.POST('categoria')
+    nome = request.POST.get('categoria')
     essencial = bool(request.POST.get('essencial'))
+    
+    if len(nome.strip()) == 0:
+        messages.add_message(request, constants.ERROR, 'Preencha o campo Categoria')
+        return redirect('/perfil/gerenciar')
+    
+    
 
     categoria = Categoria(
         categoria=nome,
@@ -57,6 +66,11 @@ def cadastrar_categoria(request):
     )
     categoria.save()
 
-    messages.add_message(request, constants.SUCCESS, 'Conta Deletada com sucesso!')
+    messages.add_message(request, constants.SUCCESS, 'Categoria cadastrada com sucesso!')
     return redirect('/perfil/gerenciar')
 
+def update_categoria(request, id):
+    categoria = Categoria.objects.get(id=id)
+    categoria.essencial = not categoria.essencial
+    categoria.save()
+    return redirect('/perfil/gerenciar')
