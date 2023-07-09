@@ -76,3 +76,15 @@ def update_categoria(request, id):
     categoria.essencial = not categoria.essencial
     categoria.save()
     return redirect('/perfil/gerenciar')
+
+
+def dashboard(request):
+    dados = {}
+
+    categorias = Categoria.objects.all()
+
+    for categoria in categorias:
+        total = 0
+        valores = Valores.obje
+
+    return render(request, 'dashboard.html')
