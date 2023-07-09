@@ -31,9 +31,9 @@
                         <div class="col-md">
                             <label>Categoria</label>
                             <select name="categoria" class="form-select">
-                                {% for categoria in categoria %}
-                                <option value="{{categoria.id}}">{{categoria}}</option>
-                               {% endfor %}
+                                {% for categoria in categorias %}
+                                    <option value="{{categoria.id}}">{{categoria}}</option>
+                                 {% endfor %}
                             </select>
                         </div>
                     </div>
